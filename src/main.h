@@ -16,5 +16,6 @@
  *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// Plugin Current Version
 #define VERSION 1
 #define VERSION_MIN 0

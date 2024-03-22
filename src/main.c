@@ -39,54 +39,51 @@ float pplayer_health; // Health
 float pplayer_armor; // Armor
 
 SceInt64 sceKernelGetSystemTimeWidePatched(void) { // LCS & VCS
-  pplayer = GetPPLAYER(); // Get pplayer address
-  if (!pplayer) // Break if pplayer not found
-    return sceKernelGetSystemTimeWide();
+    pplayer = GetPPLAYER(); // Get pplayer address
+    if (!pplayer) // Break if pplayer not found
+        goto BREAK;
   
-  pplayer_health = getFloat(pplayer + (LCS ? HEALTH_OFFSET_LCS : HEALTH_OFFSET_VCS)); // Get Health
-  pplayer_armor = getFloat(pplayer + (LCS ? ARMOR_OFFSET_LCS : ARMOR_OFFSET_VCS)); // Get Armor
+    pplayer_health = getFloat(pplayer + (LCS ? HEALTH_OFFSET_LCS : HEALTH_OFFSET_VCS)); // Get Health
+    pplayer_armor = getFloat(pplayer + (LCS ? ARMOR_OFFSET_LCS : ARMOR_OFFSET_VCS)); // Get Armor
 
-  if (pplayer_health > 1.1f) { // If health > 1.1f, set to 1.1f (less than 1.1f health = player dies)
-      setFloat(pplayer+(LCS ? HEALTH_OFFSET_LCS : HEALTH_OFFSET_VCS), 1.1f);
-  }
-  if (pplayer_armor > 0.0f) { // No armor :)
-    setFloat(pplayer+(LCS ? ARMOR_OFFSET_LCS : ARMOR_OFFSET_VCS), 0.0f);
-  }
+    if (pplayer_health > 1.1f) // If health > 1.1f, set to 1.1f (less than 1.1f health = player dies)
+        setFloat(pplayer+(LCS ? HEALTH_OFFSET_LCS : HEALTH_OFFSET_VCS), 1.1f);
 
-  return sceKernelGetSystemTimeWide();
+    if (pplayer_armor > 0.0f) // No armor :)
+        setFloat(pplayer+(LCS ? ARMOR_OFFSET_LCS : ARMOR_OFFSET_VCS), 0.0f);
+    
+    BREAK:
+    return sceKernelGetSystemTimeWide();
 }
 
 
 static void CheckModules() { // PPSSPP only
-  SceUID modules[10];
-  int count = 0;
-  if( sceKernelGetModuleIdList(modules, sizeof(modules), &count) >= 0 ) {
-    int i;
-    SceKernelModuleInfo info;
-    for( i = 0; i < count; ++i ) {
-      info.size = sizeof(SceKernelModuleInfo);
-      if (sceKernelQueryModuleInfo(modules[i], &info) < 0) {
-        continue;
-      }
-      if (strcmp(info.name, "GTA3") == 0) {
-        mod_text_addr = info.text_addr;
-        mod_text_size = info.text_size;
-        mod_data_size = info.data_size;
-    
-        /// with this approach the game continues to run when patch() is still in progress
-      
-        sceKernelDelayThread(1000 * 100); // small delay to fix blackscreen for LCS (mostly slow android devices)
-    
-        int ret = patch();
-        if( ret != 0 ) // patching returned error
-          return;
+    SceUID modules[10];
+    int count = 0;
+    if( sceKernelGetModuleIdList(modules, sizeof(modules), &count) >= 0 ) {
+        int i;
+        SceKernelModuleInfo info;
+        for( i = 0; i < count; ++i ) {
+            info.size = sizeof(SceKernelModuleInfo);
+            if (sceKernelQueryModuleInfo(modules[i], &info) < 0) {
+                continue;
+            }
+            if (strcmp(info.name, "GTA3") == 0) {
+                mod_text_addr = info.text_addr;
+                mod_text_size = info.text_size;
+                mod_data_size = info.data_size;
 
-        sceKernelDcacheWritebackAll();
-        return;
-      }
+                sceKernelDelayThread(1000 * 100); // Delay to fix crashes
+                int ret = patch();
+                if( ret != 0 ) // Patching returned error
+                    return;
+
+                sceKernelDcacheWritebackAll();
+                return;
+            }
+        }
     }
-  }
-}
+}   
 
 int OnModuleStart(SceModule2 *mod) {
   char *modname = mod->modname;
@@ -97,7 +94,7 @@ int OnModuleStart(SceModule2 *mod) {
     mod_data_size = mod->data_size;
 
     int ret = patch();
-    if( ret != 0 ) // patching returned error
+    if( ret != 0 ) // Patching returned error
       return -1;
     sceKernelDcacheWritebackAll();
   }
@@ -114,7 +111,7 @@ int module_start(SceSize argc, void* argp) {
         PPSSPP = 1;
 
     if( PPSSPP ) 
-        CheckModules(); // scan the modules using normal/official syscalls (https://github.com/hrydgard/ppsspp/pull/13335#issuecomment-689026242)
+        CheckModules(); // Scan the modules using normal/official syscalls (https://github.com/hrydgard/ppsspp/pull/13335#issuecomment-689026242)
     
     else // PSP
         previous = sctrlHENSetStartModuleHandler(OnModuleStart); 

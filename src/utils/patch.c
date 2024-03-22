@@ -43,7 +43,6 @@ int PatchVCS(u32 addr, u32 text_addr) {
 
     if( _lw(addr - 0xC) == 0x1000FFF7 && _lw(addr + 0x4) == 0x00000000 && _lw(addr + 0x8) == 0x27A60010 && _lw(addr + 0x10) == 0x00602825 && _lw(addr + 0x1C) == 0x8FA40014 ) {
         MAKE_CALL(addr, sceKernelGetSystemTimeWidePatched); // Loop
-    
         return 1;
     }
 
@@ -52,18 +51,15 @@ int PatchVCS(u32 addr, u32 text_addr) {
 
 int patch() {
     u32 i;
-    int lcs_counter = 0, vcs_counter = 0;
     for( i = 0; i < mod_text_size; i += 4 ) {
         u32 addr = mod_text_addr + i;
     
         // first hit decides on version -> yes, potentially dangerous
         if( (LCS == 1 || (LCS == VCS)) && PatchLCS(addr, mod_text_addr) ) {
-            lcs_counter++;
             LCS = 1;
             continue;
         }
         if( (VCS == 1 || (LCS == VCS)) && PatchVCS(addr, mod_text_addr) ) {
-            vcs_counter++;
             VCS = 1;
             continue;
         }
