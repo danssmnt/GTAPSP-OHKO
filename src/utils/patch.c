@@ -24,11 +24,11 @@ int VCS = 0;
 
 int PatchLCS(u32 addr, u32 text_addr) {
     if( _lw(addr + 0x8) == 0x000429C0 && _lw(addr + 0xC) == 0x00A53021 && _lw(addr + 0x18) == 0x00A42023 && _lw(addr + 0x2C) == 0x8C820000 ) {  //0x1d18b0
-        GetPPLAYER = (void*)(addr); //get pplayer 
+        GetPPLAYER = (void*)(addr); // Get pplayer addr
         return 1;
     }
     if( _lw(addr - 0x70) == 0x3C043586  && _lw(addr + 0x18) == 0x00402025  && _lw(addr + 0x64) == 0x34040001 ) {
-        MAKE_CALL(addr, sceKernelGetSystemTimeWidePatched); 
+        MAKE_CALL(addr, sceKernelGetSystemTimeWidePatched); // Loop
         return 1;
     }
 
@@ -37,12 +37,12 @@ int PatchLCS(u32 addr, u32 text_addr) {
 
 int PatchVCS(u32 addr, u32 text_addr) {
     if( _lw(addr + 0x8) == 0x00043200 && _lw(addr + 0x18) == 0x00C42021 && _lw(addr + 0x28) == 0x8C820000 ) {  // 0x15c424
-        GetPPLAYER = (void*)(addr); // get pplayer 
+        GetPPLAYER = (void*)(addr); // Get pplayer addr
         return 1;
     }
 
     if( _lw(addr - 0xC) == 0x1000FFF7 && _lw(addr + 0x4) == 0x00000000 && _lw(addr + 0x8) == 0x27A60010 && _lw(addr + 0x10) == 0x00602825 && _lw(addr + 0x1C) == 0x8FA40014 ) {
-        MAKE_CALL(addr, sceKernelGetSystemTimeWidePatched); // 0x002030D4
+        MAKE_CALL(addr, sceKernelGetSystemTimeWidePatched); // Loop
     
         return 1;
     }

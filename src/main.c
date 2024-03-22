@@ -25,29 +25,35 @@
 #include <time.h>
 #include "utils/patch.h"
 #include "utils/utils.h"
+#include "main.h"
 
-PSP_MODULE_INFO("GTA OHKO", 0, 1, 0); // user
+PSP_MODULE_INFO("GTA OHKO", 0, VERSION, VERSION_MIN);
 
-int pplayer = 0;
+#define HEALTH_OFFSET_LCS 0x4B8 // LCS Health Offset (pplayer)
+#define HEALTH_OFFSET_VCS 0x4E4 // VCS Health Offset (pplayer)
+#define ARMOR_OFFSET_LCS 0x4BC  // LCS Armor Offset (pplayer)
+#define ARMOR_OFFSET_VCS 0x4E8  // VCS Armor Offset (pplayer)
 
-float pplayer_health;
-float pplayer_armor;
+int pplayer; // pplayer pointer
+float pplayer_health; // Health
+float pplayer_armor; // Armor
 
 SceInt64 sceKernelGetSystemTimeWidePatched(void) { // LCS & VCS
-    pplayer = GetPPLAYER();
-    if (pplayer) {
-        pplayer_health = getFloat(pplayer + (LCS ? 0x4b8 : 0x4E4));
-        pplayer_armor = getFloat(pplayer + (LCS ? 0x4bc : 0x4E8));
-        if (pplayer_health > 1.1f) {
-            setFloat(pplayer+(LCS ? 0x4b8 : 0x4E4), 1.1f);
-        }
-        if (pplayer_armor > 0.0f) {
-            setFloat(pplayer+(LCS ? 0x4bc : 0x4E8), 0.0f);
-        }
-
-    }
-
+  pplayer = GetPPLAYER(); // Get pplayer address
+  if (!pplayer) // Break if pplayer not found
     return sceKernelGetSystemTimeWide();
+  
+  pplayer_health = getFloat(pplayer + (LCS ? HEALTH_OFFSET_LCS : HEALTH_OFFSET_VCS)); // Get Health
+  pplayer_armor = getFloat(pplayer + (LCS ? ARMOR_OFFSET_LCS : ARMOR_OFFSET_VCS)); // Get Armor
+
+  if (pplayer_health > 1.1f) { // If health > 1.1f, set to 1.1f (less than 1.1f health = player dies)
+      setFloat(pplayer+(LCS ? HEALTH_OFFSET_LCS : HEALTH_OFFSET_VCS), 1.1f);
+  }
+  if (pplayer_armor > 0.0f) { // No armor :)
+    setFloat(pplayer+(LCS ? ARMOR_OFFSET_LCS : ARMOR_OFFSET_VCS), 0.0f);
+  }
+
+  return sceKernelGetSystemTimeWide();
 }
 
 

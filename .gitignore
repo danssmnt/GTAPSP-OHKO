@@ -1,3 +1,4 @@
 # Useless
 *.elf
 *.o
+.vscode
