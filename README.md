@@ -1,2 +1,2 @@
 # GTAPSP-OHKO
-OHKO mod for GTA: LCS and GTA:VCS on PSP!
+OHKO (One Hit Takedown) mod for LCS/VCS on PSP!
