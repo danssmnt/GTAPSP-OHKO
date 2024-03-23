@@ -3,7 +3,7 @@
 TARGET = build/GTA_OHKO
 OBJS = src/exports/exports.o src/utils/patch.o src/utils/utils.o src/main.o
 	
-CFLAGS = -O2 -Os -G0 -Wall -fshort-wchar -fno-pic -mno-check-zero-division
+CFLAGS = -O2 -Os -G0 -Wall -fshort-wchar -fno-pic -mno-check-zero-division -Werror
 CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
 ASFLAGS = $(CFLAGS)
 

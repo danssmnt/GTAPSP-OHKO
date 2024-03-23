@@ -34,6 +34,8 @@ PSP_MODULE_INFO("GTA OHKO", 0, VERSION, VERSION_MIN);
 #define ARMOR_OFFSET_LCS 0x4BC  // LCS Armor Offset (pplayer)
 #define ARMOR_OFFSET_VCS 0x4E8  // VCS Armor Offset (pplayer)
 
+static STMOD_HANDLER previous;
+
 int pplayer; // pplayer pointer
 float pplayer_health; // Health
 float pplayer_armor; // Armor

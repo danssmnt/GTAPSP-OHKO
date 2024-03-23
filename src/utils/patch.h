@@ -27,7 +27,6 @@ u32 mod_data_size;
 extern int PPSSPP;
 extern int LCS;
 extern int VCS;
-static STMOD_HANDLER previous;
 
 int (* GetPPLAYER)();
 
