@@ -1,10 +1,8 @@
 # GTAPSP-OHKO
 **OHKO** (One-Hit Knockdown) mod for LCS/VCS on PSP!
 
-<img src="images/LCS.png" width="300"/>
-<img src="images/VCS.png" width="300"/>
-
-<br>
+<img src="images/LCS.png" width="512"/>
+<img src="images/VCS.png" width="512"/>
 
 # About
 
