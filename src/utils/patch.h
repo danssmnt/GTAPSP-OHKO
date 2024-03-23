@@ -31,7 +31,7 @@ static STMOD_HANDLER previous;
 
 int (* GetPPLAYER)();
 
-SceInt64 sceKernelGetSystemTimeWidePatched(void);
+int sceKernelSysClock2USecWidePatched(SceInt64 clock, unsigned *low, unsigned int *high);
 
 int PatchLCS(u32 addr, u32 text_addr);
 int PatchVCS(u32 addr, u32 text_addr);

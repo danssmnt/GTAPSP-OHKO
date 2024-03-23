@@ -14,7 +14,7 @@ It's a pretty simple plugin, very small in size!
 
 # Installation
 
-⚠️ WARNING: This mod breaks **Cheat Device Remastered by Freakler**, don't use this plugin and CDR together!
+⚠️ WARNING: This plugin doesn't work with [gta_trophies](https://github.com/Freakler/psp-gta_trophies) by Freakler!
 
 ## PSP / Adrenaline 
 

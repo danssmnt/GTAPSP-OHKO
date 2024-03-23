@@ -38,7 +38,7 @@ int pplayer; // pplayer pointer
 float pplayer_health; // Health
 float pplayer_armor; // Armor
 
-SceInt64 sceKernelGetSystemTimeWidePatched(void) { // LCS & VCS
+int sceKernelSysClock2USecWidePatched(SceInt64 clock, unsigned *low, unsigned int *high) { // LCS & VCS
     pplayer = GetPPLAYER(); // Get pplayer address
     if (!pplayer) // Break if pplayer not found
         goto BREAK;
@@ -53,7 +53,7 @@ SceInt64 sceKernelGetSystemTimeWidePatched(void) { // LCS & VCS
         setFloat(pplayer+(LCS ? ARMOR_OFFSET_LCS : ARMOR_OFFSET_VCS), 0.0f);
     
     BREAK:
-    return sceKernelGetSystemTimeWide();
+    return sceKernelSysClock2USecWide(clock, low, high);
 }
 
 
